@@ -19,7 +19,7 @@ def get_priority():
         return ""
 
 
-def get_uptime():
+def uptime():
     uptime = time.time() - psutil.boot_time() # Uptime in secondi
     uptime_hours = uptime // 3600  # Ore intere
     uptime_minutes = (uptime % 3600) // 60  # Minuti rimanenti
