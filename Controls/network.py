@@ -4,34 +4,38 @@ import time
 
 #status = psutil.net_connections(kind="inet").status
 
-DELAY = 1 # in second
+DELAY = 5 # in second
 
 
 def upload_speed():
-    network = psutil.net_io_counters(pernic=False, nowrap=True)
-    bytes_sent = network.bytes_sent
+    try:
+        network = psutil.net_io_counters(pernic=False, nowrap=True)
+        bytes_sent = network.bytes_sent
 
-    time.sleep(DELAY)
+        time.sleep(DELAY)
 
-    network_2 = psutil.net_io_counters(pernic=False, nowrap=True)
-    byte_sent_2 = network_2.bytes_sent
+        network_2 = psutil.net_io_counters(pernic=False, nowrap=True)
+        byte_sent_2 = network_2.bytes_sent
 
-    upload_speed = (byte_sent_2 - bytes_sent) * 2 ** (-20) / DELAY
+        up_speed = round((byte_sent_2 - bytes_sent) / 1024 / DELAY, 2)
 
-    return upload_speed # in Mb/s
+        return up_speed # in KB/s
+    except:
+        return "Not Available"
 
 
 def download_speed():
-    network = psutil.net_io_counters()
-    bytes_recv = network.bytes_recv
+    try:
+        network = psutil.net_io_counters(pernic=False, nowrap=True)
+        bytes_recv = network.bytes_recv
 
-    time.sleep(DELAY)
+        time.sleep(DELAY)
 
-    network_2 = psutil.net_io_counters()
-    bytes_recv_2 = network_2.bytes_recv
+        network_2 = psutil.net_io_counters(pernic=False, nowrap=True)
+        bytes_recv_2 = network_2.bytes_recv
 
-    download_speed = (bytes_recv_2 - bytes_recv) * 2 ** (-20) / DELAY
+        down_speed = round((bytes_recv_2 - bytes_recv) / 1024 / DELAY, 2)
 
-    return download_speed # in Mb/s
-
-print(upload_speed())
+        return down_speed # in KB/s
+    except:
+        return "Not Available"
