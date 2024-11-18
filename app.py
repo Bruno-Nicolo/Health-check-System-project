@@ -3,7 +3,6 @@ from telegram_bot import send_status, check_emergency, TOKEN
 import telegram_bot
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 
-
 def add_handlers(bot):
     # commands
     bot.add_handler(CommandHandler('start', telegram_bot.start_command))

@@ -4,6 +4,7 @@ from telegram.ext import ContextTypes, CallbackContext
 from Controls import cpu, ram, disks, network, general_info
 import thresholds
 
+
 # Bot variables
 BOT_USERNAME = "@SysScanner_bot"
 TOKEN = "7717659591:AAHLYDAqpO1MZoDmQKnf_KD7H2KSpuAh4ZI"
