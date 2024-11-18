@@ -97,3 +97,4 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Errors
 async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print(f'Update {update} caused error {context.error}')
+
