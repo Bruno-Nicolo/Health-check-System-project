@@ -24,3 +24,4 @@ def get_uptime():
     uptime_hours = uptime // 3600  # Ore intere
     uptime_minutes = (uptime % 3600) // 60  # Minuti rimanenti
     return f"{uptime_hours}h {uptime_minutes}m"
+
