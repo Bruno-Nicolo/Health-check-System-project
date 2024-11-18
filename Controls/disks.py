@@ -8,17 +8,24 @@ import thresholds
 import psutil
 
 
-disks = psutil.disk_usage('/')
+def used():
+    disks = psutil.disk_usage('/')
+    return disks.used * 2**(-30) #da byte a gigabyte
 
-used = disks.used * 2**(-30) #da byte a gigabyte
-total = disks.total * 2**(-30) #da byte a gigabyte
-percent = disks.percent
+
+def total():
+    disks = psutil.disk_usage('/')
+    return disks.total * 2**(-30) #da byte a gigabyte
+
+
+def percent():
+    disks = psutil.disk_usage('/')
+    return disks.percent
+
 
 def get_priority():
     free = psutil.disk_usage('/').free * 2 ** (-30)
     if free <= thresholds.DISKS:
-        return 1 # livello di priorità 1 ossia alto
-    elif free <= thresholds.DISKS + 5 and disks >= thresholds.DISKS:
-        return 2 # livello di priorità 2 ossia medio
+        return "⚠️"
     else:
-        return 3 # livello di priorità 3 ossia bassa
+        return ""
