@@ -14,7 +14,7 @@ import thresholds
 #il sistema entri in swap
 def available():
     ram = psutil.virtual_memory()
-    return ram.available
+    return round(ram.available * 2**(-30), 2)
 
 #percentuale mem = (tot-available)/tot *100
 def percentage():
@@ -24,21 +24,17 @@ def percentage():
 #memoria attiva è la memoria attualmente in uso e quindi è in RAM
 def active():
     ram = psutil.virtual_memory()
-    return ram.active
+    return round(ram.active * 2**(-30), 2)
 
 #memoria inattiva è la memoria non utilizzata
 def inactive():
     ram = psutil.virtual_memory()
-    return ram.inactive
+    return round(ram.inactive * 2**(-30), 2)
 
 
 
 def get_priority():
-    ram = psutil.virtual_memory()
-
-    available = ram.available
-
-    if available >= thresholds.RAM:
+    if percentage() <= thresholds.RAM:
         return "⚠️"
     else:
         return ""

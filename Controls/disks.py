@@ -10,12 +10,12 @@ import psutil
 
 def used():
     disks = psutil.disk_usage('/')
-    return disks.used * 2**(-30) #da byte a gigabyte
+    return round(disks.used * 2**(-30), 2) #da byte a gigabyte
 
 
 def total():
     disks = psutil.disk_usage('/')
-    return disks.total * 2**(-30) #da byte a gigabyte
+    return round(disks.total * 2**(-30), 2) #da byte a gigabyte
 
 
 def percent():

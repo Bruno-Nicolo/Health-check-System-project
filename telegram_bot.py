@@ -15,18 +15,18 @@ def get_server_status():
     return (
         "<b>Server Health Check 🔍</b>\n\n"
         f"CPU usage: {cpu.percentage()}% {cpu.get_priority()}\n"
-        f"CPU frequency: {cpu.frequency()}Hz\n\n"
-        f"RAM available: {ram.available()} unità di misura\n"
+        f"CPU frequency: {cpu.frequency()} Hz\n\n"
+        f"RAM available: {ram.available()} GB\n"
         f"RAM available percentage: {ram.percentage()}% {ram.get_priority()}\n"
-        f"RAM in use: {ram.active()}\n"
-        f"RAM not in use: {ram.inactive()}\n\n"
-        f"Disk total space: {disks.total()}Gb\n"
-        f"Disk used space: {disks.used()}Gb\n {disks.get_priority()}"
+        f"RAM in use: {ram.active()} GB\n"
+        f"RAM not in use: {ram.inactive()} GB\n\n"
+        f"Disk total space: {disks.total()} GB\n"
+        f"Disk used space: {disks.used()} GB {disks.get_priority()}\n"
         f"Disk used space in percentage: {disks.percent()}%\n\n"
-        f"Download speed: {network.download_speed()}KB/s\n"
-        f"Upload speed: {network.upload_speed()}KB/s\n"
-        f"Temperature: {general_info.temperature()}°C {general_info.get_priority()}"
-        f"Uptime: {general_info.uptime()}"
+        f"Download speed: {network.download_speed()} Kb/s\n"
+        f"Upload speed: {network.upload_speed()} Kb/s\n\n"
+        f"Temperature: {general_info.temperature()} {general_info.get_priority()}\n"
+        f"Uptime: {general_info.uptime()}\n"
     )
 
 
@@ -36,8 +36,9 @@ async def send_status(context: CallbackContext) -> None:
 
 async def check_emergency(context: CallbackContext) -> None:
     if (cpu.percentage() >= thresholds.CPU or
-        ram.available() >= thresholds.RAM or
-        disks.total() - disks.used() <= thresholds.DISKS
+        ram.percentage() <= thresholds.RAM or
+        disks.total() - disks.used() <= thresholds.DISKS or
+        general_info.get_priority() != ""
     ):
         await context.bot.send_message(chat_id=chat_id, text=get_server_status(), parse_mode="HTML")
 
