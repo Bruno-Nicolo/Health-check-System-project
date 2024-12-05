@@ -1,26 +1,23 @@
 
-# Add the parent directory to sys.path
-import sys
-import os
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-import thresholds
 import psutil
 
-
-def percentage():
-    # percentuale di utilizzo della cpu
-    return psutil.cpu_percent(interval=1)
-
-
-def frequency():
-    # attuale frequenza di clock della cpu
-    return psutil.cpu_freq().current
+class Cpu:
+    def __init__(self, cpu_threshold):
+        self.cpu_threshold = cpu_threshold
 
 
-def get_priority():
-    if percentage() >= thresholds.CPU:
-        return "⚠️"
-    else:
-        return ""
+    def percentage(self):
+        # percentuale di utilizzo della cpu
+        return psutil.cpu_percent(interval=1)
+
+
+    def frequency(self):
+        # attuale frequenza di clock della cpu
+        return psutil.cpu_freq().current
+
+
+    def get_priority(self):
+        if self.percentage() >= self.cpu_threshold:
+            return "🔴"
+        else:
+            return ""

@@ -1,102 +1,113 @@
 
 from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext
-from Controls import cpu, ram, disks, network, general_info
 import thresholds
+from Controls.cpu import Cpu
+from Controls.ram import Ram
+from Controls.disks import Disk
+from Controls.network import Network
+from Controls.general_info import General_info
+
+# Objects
+CPU = Cpu(thresholds.CPU)
+RAM = Ram(thresholds.RAM)
+DISK = Disk(thresholds.DISKS)
+NETWORK = Network()
+GENERAL_INFO = General_info(thresholds.TEMPERATURE)
 
 
-# Bot variables
-BOT_USERNAME = "@SysScanner_bot"
-TOKEN = "7717659591:AAHLYDAqpO1MZoDmQKnf_KD7H2KSpuAh4ZI"
-chat_id = "725588367"
+class Bot:
+    def __init__(self, chat_id):
+        self.__USERNAME = "@SysScanner_bot"
+        self.TOKEN = "7717659591:AAHLYDAqpO1MZoDmQKnf_KD7H2KSpuAh4ZI"
+        self.chat_id = chat_id
 
-
-def get_server_status():
-    return (
-        "<b>Server Health Check 🔍</b>\n\n"
-        f"CPU usage: {cpu.percentage()}% {cpu.get_priority()}\n"
-        f"CPU frequency: {cpu.frequency()} Hz\n\n"
-        f"RAM available: {ram.available()} GB\n"
-        f"RAM available percentage: {ram.percentage()}% {ram.get_priority()}\n"
-        f"RAM in use: {ram.active()} GB\n"
-        f"RAM not in use: {ram.inactive()} GB\n\n"
-        f"Disk total space: {disks.total()} GB\n"
-        f"Disk used space: {disks.used()} GB {disks.get_priority()}\n"
-        f"Disk used space in percentage: {disks.percent()}%\n\n"
-        f"Download speed: {network.download_speed()} Kb/s\n"
-        f"Upload speed: {network.upload_speed()} Kb/s\n\n"
-        f"Temperature: {general_info.temperature()} {general_info.get_priority()}\n"
-        f"Uptime: {general_info.uptime()}\n"
-    )
-
-
-async def send_status(context: CallbackContext) -> None:
-    await context.bot.send_message(chat_id=chat_id, text=get_server_status(), parse_mode="HTML")
-
-
-async def check_emergency(context: CallbackContext) -> None:
-    if (cpu.percentage() >= thresholds.CPU or
-        ram.percentage() <= thresholds.RAM or
-        disks.total() - disks.used() <= thresholds.DISKS or
-        general_info.get_priority() != ""
-    ):
-        await context.bot.send_message(chat_id=chat_id, text=get_server_status(), parse_mode="HTML")
-
-
-# Commands
-async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    username = update.message.chat.first_name
-
-    # messaggio diverso per gruppo e chat privata
-    if update.message.chat.type == "private":
-        await update.message.reply_text(f"Hello {username}! 👋🏻 \n\nThanks for choosing our service 👨🏻‍💻")
-    else:
-        await update.message.reply_text(
-            f"Hello {username}! 👋🏻 \n\nThanks for choosing our service 👨🏻‍💻\n\n"
-            "Don't forget to make me admin of the group, or I won't be able to reply to the commands"
+    def __get_server_status(self):
+        return (
+            "<b>Server Health Check 🔍</b>\n\n"
+            f"CPU usage: {CPU.percentage()}% {CPU.get_priority()}\n"
+            f"CPU frequency: {CPU.frequency()} Hz\n\n"
+            f"RAM available: {RAM.available()} GB\n"
+            f"RAM available percentage: {RAM.percentage()}% {RAM.get_priority()}\n"
+            f"RAM in use: {RAM.active()} GB\n"
+            f"RAM not in use: {RAM.inactive()} GB\n\n"
+            f"Disk total space: {DISK.total()} GB\n"
+            f"Disk used space: {DISK.used()} GB {DISK.get_priority()}\n"
+            f"Disk used space in percentage: {DISK.percent()}%\n\n"
+            f"Download speed: {NETWORK.download_speed()} Kb/s\n"
+            f"Upload speed: {NETWORK.upload_speed()} Kb/s\n\n"
+            f"Temperature: {GENERAL_INFO.temperature()} {GENERAL_INFO.get_priority()}\n"
+            f"Uptime: {GENERAL_INFO.uptime()}\n"
         )
 
 
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    help_message = ("<b>List of available commands: </b>\n\n"
-                    "/status - get info about the current status of the server\n"
-                    "/help - get the list of all the commands\n"
-                    "/id - get your chatID"
-                    )
-    await update.message.reply_text(help_message, parse_mode="HTML")
+    async def send_status(self, context: CallbackContext) -> None:
+        await context.bot.send_message(chat_id=self.chat_id, text=self.__get_server_status(), parse_mode="HTML")
 
 
-async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(get_server_status(), parse_mode="HTML")
+    async def check_emergency(self, context: CallbackContext) -> None:
+        if (CPU.get_priority() != "" or
+            RAM.get_priority() != "" or
+            DISK.get_priority() != "" or
+            GENERAL_INFO.get_priority() != ""
+        ):
+            await context.bot.send_message(chat_id=self.chat_id, text=self.__get_server_status(), parse_mode="HTML")
 
 
-async def id_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    id = update.message.chat.id
-    chat_type = update.message.chat.type
-    await update.message.reply_text(f"Your {chat_type} chatID is:\n {id}")
+    # Commands
+    async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        username = update.message.chat.first_name
+
+        # messaggio diverso per gruppo e chat privata
+        if update.message.chat.type == "private":
+            await update.message.reply_text(f"Hello {username}! 👋🏻 \n\nThanks for choosing our service 👨🏻‍💻\n\nHere you will receive recurring notification about the status of you machine. 🔔\n\nWrite /help to see the list of all available commands.")
+        else:
+            await update.message.reply_text(
+                f"Hello {username}! 👋🏻 \n\nThanks for choosing our service 👨🏻‍💻\n\n"
+                "Don't forget to make me admin of the group, or I won't be able to reply to the commands"
+            )
 
 
-# Responses
-def handle_response(text):
-    if "/" not in text:
-        return "To see the list of all the commands write /help"
-    else:
-        return "Command not found. \nTo se the list of all the commands write /help"
+    async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        help_message = ("<b>List of available commands: </b>\n\n"
+                        "/status - get info about the current status of the server\n"
+                        "/help - get the list of all the commands\n"
+                        "/id - get your chatID"
+                        )
+        await update.message.reply_text(help_message, parse_mode="HTML")
 
 
-async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    text = update.message.text
-
-    if BOT_USERNAME in text:
-        new_text = text.replace(BOT_USERNAME, "").strip()
-        response = handle_response(new_text)
-    else:
-        response = handle_response(text)
-
-    await update.message.reply_text(response)
+    async def status_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        await update.message.reply_text(self.__get_server_status(), parse_mode="HTML")
 
 
-# Errors
-async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    print(f'Update {update} caused error {context.error}')
+    async def id_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        id = update.message.chat.id
+        chat_type = update.message.chat.type
+        await update.message.reply_text(f"Your {chat_type} chatID is:\n {id}")
+
+
+    # Responses
+    def __handle_response(self, text):
+        if "/" not in text:
+            return "To see the list of all the commands write /help"
+        else:
+            return "Command not found. \nTo se the list of all the commands write /help"
+
+
+    async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        text = update.message.text
+
+        if self.__USERNAME in text:
+            new_text = text.replace(self.__USERNAME, "").strip()
+            response = self.__handle_response(new_text)
+        else:
+            response = self.__handle_response(text)
+
+        await update.message.reply_text(response)
+
+
+    # Errors
+    async def error(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        print(f'Update {update} caused error {context.error}')
 
