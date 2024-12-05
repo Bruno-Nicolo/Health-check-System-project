@@ -1,36 +1,38 @@
 
-from telegram_bot import send_status, check_emergency, TOKEN
-import telegram_bot
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
+from telegram_bot import Bot
+
+
+# Bot variables
+chat_id = "725588367"
+BOT = Bot(chat_id)
+
 
 def add_handlers(bot):
     # commands
-    bot.add_handler(CommandHandler('start', telegram_bot.start_command))
-    bot.add_handler(CommandHandler('help', telegram_bot.help_command))
-    bot.add_handler(CommandHandler('status', telegram_bot.status_command))
-    bot.add_handler(CommandHandler('id', telegram_bot.id_command))
+    bot.add_handler(CommandHandler('start', BOT.start_command))
+    bot.add_handler(CommandHandler('help', BOT.help_command))
+    bot.add_handler(CommandHandler('status', BOT.status_command))
+    bot.add_handler(CommandHandler('id', BOT.id_command))
     # Messages
-    bot.add_handler(MessageHandler(filters.TEXT, telegram_bot.handle_message))
+    bot.add_handler(MessageHandler(filters.TEXT, BOT.handle_message))
     # Errors
-    bot.add_error_handler(telegram_bot.error)
+    bot.add_error_handler(BOT.error)
 
 
 def main():
     print("Starting bot...\n")
-    app = Application.builder().token(TOKEN).build()
+    app = Application.builder().token(BOT.TOKEN).build()
 
     add_handlers(app)
 
-    # messaggio ricorrente con lo stato del server (ogni 5min)
-    app.job_queue.run_repeating(send_status, interval=300, first=120)
+    # messaggio ricorrente ogni 5min
+    app.job_queue.run_repeating(BOT.send_status, interval=300, first=120)
 
     # controllo emergenze ogni 2min
-    app.job_queue.run_repeating(check_emergency, interval=120, first=60)
+    app.job_queue.run_repeating(BOT.check_emergency, interval=120, first=60)
 
     print("Polling...")
     app.run_polling()
 
-
-if __name__ == "__main__":
-    main()
 

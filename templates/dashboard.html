@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+
+	<!-- blocco head -->
+{% block head %}
+{% endblock %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+	
+
+    <!-- blocco body -->
+{% block body %}
+    <div class="grid-container">
+        
+        <div class="grid-item item1">
+            <div style="font: var(--h2)">UPTIME</div>
+            <div style="font: var(--h1);">{{general.uptime()}}</div>
+        </div>
+        
+        <div class="grid-item item2">
+        <div style="font: var(--h2)">TEMPERATURE</div>
+        <div style="font:var(--h1)">{{general.temperature()}} {{general.get_priority()}}</div>
+        </div>
+        
+        <div class="grid-item item3">
+        <div style="font: var(--h2)">DISK SPACE</div>
+        <div style="font:var(--h1)">{{disk.used()}}GB {{disk.get_priority()}}</div>
+        </div>
+        
+        <div class="grid-item item4">
+        <div style="font:var(--h2)">CPU</div>
+        <hr>
+        <div class="row">
+            <div style="flex-grow: 1;">Usage percentage:</div>
+            <div class="data">{{cpu.get_priority()}} {{cpu.percentage()}}%</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div style="flex-grow: 1;">Clock frequency:</div>
+            <div class="data">{{cpu.frequency()}}Hz</div>
+        </div>
+        </div>
+        
+        <div class="grid-item item5">
+            <div><span style="font:var(--h2)">RAM</span></div>
+            <hr>
+            <div class="row">
+                <div style="flex-grow: 1;">Avaible:</div>
+                <div class="data">{{ram.available()}}GB</div>
+            </div>
+            <hr>
+            <div class="row">
+                <div style="flex-grow: 1;">Active:</div>
+                <div class="data">{{ram.active()}}GB</div>
+            </div>
+            <hr>
+            <div class="row">
+                <div style="flex-grow: 1;">Inactive:</div>
+                <div class="data">{{ram.inactive()}}GB</div>
+            </div>
+            <hr>
+            <div class="row">
+                <div style="flex-grow: 1;">Percentage:</div>
+                <div class="data">{{ram.get_priority()}} {{ram.percentage()}}%</div>
+            </div>
+        </div>
+
+        <div class="grid-item item6">
+            <span style="font:var(--h2)">DISKS</span>
+            <hr>
+            <div class="row">
+                <div style="flex-grow: 1;">Used:</div>
+                <div class="data">{{disk.used()}}GB</div>
+            </div>
+            <hr>
+            <div class="row">
+                <div style="flex-grow: 1;">Total:</div>
+                <div class="data">{{disk.total()}}GB</div>
+            </div>
+            <hr>
+            <div class="row">
+                <div style="flex-grow: 1;">Percentage:</div>
+                <div class="data">{{disk.percent()}}%</div>
+            </div>
+        </div>
+        
+        <div class="grid-item item7">
+            <div><span style="font:var(--h2)">NETWORK</span></div>
+            <hr>
+            <div class="row">
+                <div style="flex-grow: 1;">Upload Speed:</div>
+                <div class="data">{{network.upload_speed()}} Kb/s</div>
+            </div>
+            <hr>
+            <div class="row">
+                <div style="flex-grow: 1;">Download Speed:</div>
+                <div class="data">{{network.upload_speed()}} Kb/s</div>
+            </div>
+        </div>
+
+        <div class="grid-item item8">
+            <div><span style="font:var(--h2)">PROCESSES</span></div>
+            {% for p in general.top_processes() %}
+                <hr>
+                <div style="margin-bottom: 3px;">{{p["name"]}}</div>
+                <div class="description" style="margin-left: 12px;">
+                    <div>Pid: {{p["pid"]}}</div>
+                    <div>Accumulated process times: {{p["cpu_usage"]}}s</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        selector = document.querySelectorAll(".pageSelector")
+            selector[0].setAttribute("id", "selected")
+    </script>
+{% endblock %}

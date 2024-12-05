@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+	<html lang="en">
+	<head>
+	  <meta charset="UTF-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+		<link rel="icon" type="image/x-icon" href="/static/cropped_image.png">
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+		<title>SysScanner</title>
+
+	  {% block head %}{% endblock %}
+	</head>
+	<body>
+	
+		<div>
+			<div id="left-menu">
+				<div id="header">
+					<img id="logo" src="../static/cropped_image.png" alt="logo">
+					<i data-lucide="bell"></i>
+				</div>
+				
+				<a href="{{ url_for('dashboard') }}">
+					<div class="pageSelector" onclick="select_element(this)"><i data-lucide="house"></i><span>Dashboard</span></div>
+				</a>
+				<a href="{{ url_for('users') }}">
+					<div class="pageSelector" onclick="select_element(this)"><i data-lucide="message-circle-more"></i><span>Messages</span></div>
+				</a>
+				<a href="{{ url_for('settings') }}">
+					<div class="pageSelector" onclick="select_element(this)"><i data-lucide="settings"></i><span>Settings</span></div>
+				</a>
+				<a href="">
+					<div class="pageSelector"><i data-lucide="circle-help"></i><span>FAQ</span></div>
+				</a>
+
+				<div style="position: absolute; bottom: 0;">
+					<div class="pageSelector"><i data-lucide="user"></i><span>Nome Utente</span></div>
+				</div>
+			</div>
+		</div>
+	
+		<div style="width: 100%;">
+			<div id="top-bar">
+				<i data-lucide="align-justify" onclick="hide_left_menu()" id="toggle-left-menu"></i> 
+				<span>
+					{% block title %}
+					{% endblock %}
+				</span>
+			</div>
+			
+			<div id="body-1">
+				{% block body %}
+				{% endblock %}
+			</div>
+		</div>
+
+	
+		<script src="https://unpkg.com/lucide@latest"></script>
+		<script>
+			lucide.createIcons();
+
+			left_menu = document.getElementById("left-menu")
+			visible = true;
+			
+			function select_element(e){
+				selector = document.querySelectorAll("#selected")
+				selector.forEach(element => {
+					element.setAttribute("id", "")
+				});
+				e.setAttribute("id", "selected")
+			}
+
+			function hide_left_menu(){
+				if (visible) {
+					left_menu.setAttribute("style", "display: None")
+				} else{
+					left_menu.setAttribute("style", "display: block")
+				} 
+				visible = ! visible
+			}
+		</script>
+	</body>
+	</html>
