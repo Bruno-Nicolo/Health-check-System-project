@@ -2,22 +2,31 @@
 import psutil
 
 class Cpu:
-    def __init__(self, cpu_threshold):
-        self.cpu_threshold = cpu_threshold
+
+    def __init__(self, threshold=85, percentage=None, frequency=None):
+        self.threshold = threshold
+        self.percentage = percentage if percentage is not None else self.set_percentage()
+        self.frequency = frequency if frequency is not None else self.set_frequency()
 
 
-    def percentage(self):
+    def set_threshold(self, value):
+        self.threshold = value
+
+
+    def set_percentage(self):
+        self.percentage = psutil.cpu_percent(interval=1)
         # percentuale di utilizzo della cpu
-        return psutil.cpu_percent(interval=1)
+        return self.percentage
 
 
-    def frequency(self):
+    def set_frequency(self):
+        self.frequency = psutil.cpu_freq().current
         # attuale frequenza di clock della cpu
-        return psutil.cpu_freq().current
+        return self.frequency
 
 
     def get_priority(self):
-        if self.percentage() >= self.cpu_threshold:
+        if self.set_percentage() >= self.threshold:
             return "🔴"
         else:
             return ""

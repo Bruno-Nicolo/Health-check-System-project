@@ -3,8 +3,12 @@ import time
 
 
 class General_info:
-    def __init__(self, temperature_treshold):
-        self.temperature_threshold = temperature_treshold
+    def __init__(self, treshold=45):
+        self.threshold = treshold
+
+
+    def set_threshold(self, value):
+        self.threshold = value
 
 
     def temperature(self):
@@ -17,7 +21,7 @@ class General_info:
 
     def get_priority(self):
         try:
-            if self.temperature() >= self.temperature_threshold:
+            if self.temperature() >= self.threshold:
                 return "🟠"
             else:
                 return ""

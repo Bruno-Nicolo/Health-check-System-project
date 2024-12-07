@@ -1,7 +1,6 @@
 
 from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext
-import thresholds
 from Controls.cpu import Cpu
 from Controls.ram import Ram
 from Controls.disks import Disk
@@ -9,11 +8,11 @@ from Controls.network import Network
 from Controls.general_info import General_info
 
 # Objects
-CPU = Cpu(thresholds.CPU)
-RAM = Ram(thresholds.RAM)
-DISK = Disk(thresholds.DISKS)
+CPU = Cpu()
+RAM = Ram()
+DISK = Disk()
 NETWORK = Network()
-GENERAL_INFO = General_info(thresholds.TEMPERATURE)
+GENERAL_INFO = General_info()
 
 
 class Bot:
@@ -25,15 +24,15 @@ class Bot:
     def __get_server_status(self):
         return (
             "<b>Server Health Check 🔍</b>\n\n"
-            f"CPU usage: {CPU.percentage()}% {CPU.get_priority()}\n"
-            f"CPU frequency: {CPU.frequency()} Hz\n\n"
-            f"RAM available: {RAM.available()} GB\n"
-            f"RAM available percentage: {RAM.percentage()}% {RAM.get_priority()}\n"
-            f"RAM in use: {RAM.active()} GB\n"
-            f"RAM not in use: {RAM.inactive()} GB\n\n"
-            f"Disk total space: {DISK.total()} GB\n"
-            f"Disk used space: {DISK.used()} GB {DISK.get_priority()}\n"
-            f"Disk used space in percentage: {DISK.percent()}%\n\n"
+            f"CPU usage: {CPU.set_percentage()}% {CPU.get_priority()}\n"
+            f"CPU frequency: {CPU.set_frequency()} Hz\n\n"
+            f"RAM available: {RAM.set_available()} GB\n"
+            f"RAM available percentage: {RAM.set_percentage()}% {RAM.get_priority()}\n"
+            f"RAM in use: {RAM.set_active()} GB\n"
+            f"RAM not in use: {RAM.set_inactive()} GB\n\n"
+            f"Disk total space: {DISK.set_total()} GB\n"
+            f"Disk used space: {DISK.set_used()} GB {DISK.get_priority()}\n"
+            f"Disk used space in percentage: {DISK.set_percent()}%\n\n"
             f"Download speed: {NETWORK.download_speed()} Kb/s\n"
             f"Upload speed: {NETWORK.upload_speed()} Kb/s\n\n"
             f"Temperature: {GENERAL_INFO.temperature()} {GENERAL_INFO.get_priority()}\n"
@@ -60,7 +59,7 @@ class Bot:
 
         # messaggio diverso per gruppo e chat privata
         if update.message.chat.type == "private":
-            await update.message.reply_text(f"Hello {username}! 👋🏻 \n\nThanks for choosing our service 👨🏻‍💻\n\nHere you will receive recurring notification about the status of you machine. 🔔\n\nWrite /help to see the list of all available commands.")
+            await update.message.reply_text(f"Hello {username}! 👋🏻 \n\nThanks for choosing our service 👨🏻‍💻\n\nHere you will receive recurring notification about the status of you machine every 5min. 🔔\n\nWrite /help to see the list of all available commands.")
         else:
             await update.message.reply_text(
                 f"Hello {username}! 👋🏻 \n\nThanks for choosing our service 👨🏻‍💻\n\n"

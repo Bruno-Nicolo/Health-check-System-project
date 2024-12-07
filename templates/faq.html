@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+
+	<!-- blocco head -->
+	{% block head %}
+
+	{% endblock %}
+
+{% block title %}
+    FAQ
+{% endblock %}
+
+	<!-- blocco body -->
+
+{% block body %}
+  <div class="card" style="font: var(--p)">
+    <div class="faq">
+      <div class="question">
+          <span>1. What should I do if my system's RAM is full?</span>
+          <svg width="15" height="10" viewBox="0 0 42 25"> <!-- Questo mi da il bottone su cui schiacciare-->
+              <path d="M3 3L21 21L39 3" stroke="white" stroke-width="7" stroke-linecap="round"/>
+          </svg>
+      </div>
+
+      <div class="answer" style="font: var(--p)">
+        <ul>
+          <p>If the system's RAM is full, it may result in slow performance or crashes. Here are some steps you can take:</p>
+            <li><span class="green-bold">Close unused applications</span>: Check for applications that are consuming excessive memory and close any unnecessary ones.</li>
+            <li><span  class="green-bold">Virtual memory</span>: Configure your system's virtual memory (pagefile or swap space) to allow more memory resources.</li>
+            <li><span class="green-bold">RAM</span>: If your system regularly runs out of memory, consider adding more physical RAM.</li>
+            <li><span class="green-bold">Monitor memory usage</span>: Use a memory management tool to track which processes are using the most memory and optimize them.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="question">
+        <span>2. What should I do if my CPU is saturated?</span>
+            <svg width="15" height="10" viewBox="0 0 42 25"> <!-- Questo mi da il bottone su cui schiacciare-->
+                <path d="M3 3L21 21L39 3" stroke="white" stroke-width="7" stroke-linecap="round"/>
+            </svg>
+      </div>
+      <div class="answer">
+        <p>When the CPU is at 100% usage, it can lead to sluggish performance and system instability. To resolve this:</p>
+        <ul>
+            <li><span class="green-bold">Identify high CPU usage processes:</span> Use the Task Manager (Windows) or Activity Monitor (macOS) to find which applications or processes are using the most CPU resources.</li>
+            <li><span class="green-bold">End unnecessary processes:</span> Close programs that are not essential and consuming excessive CPU.</li>
+            <li><span class="green-bold">Check for malware:</span> Some viruses or malware can cause high CPU usage. Run a system scan with your antivirus software.</li>
+            <li><span class="green-bold">Optimize software:</span> If a specific application is consistently consuming too much CPU, check for updates or performance optimizations within the software.</li>
+            <li><span class="green-bold">Upgrade the CPU:</span> If the high usage is due to resource limitations, consider upgrading your CPU or adding additional cores.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="question">
+        <span>3. What should I do if the system temperature exceeds safe thresholds?</span>
+        <svg width="15" height="10" viewBox="0 0 42 25"> <!-- Questo mi da il bottone su cui schiacciare-->
+            <path d="M3 3L21 21L39 3" stroke="white" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <div class="answer">
+        <p>When the system temperature is too high, it can lead to hardware damage or system shutdowns. Here’s what you can do:</p>
+        <ul>
+          <li><span class="green-bold">Clean the cooling system:</span> Dust and dirt can block airflow, causing the system to overheat. Make sure fans and vents are clean and free from obstruction.</li>
+          <li><span class="green-bold">Check cooling components:</span> Ensure that your CPU cooler, GPU cooler, and case fans are functioning properly.</li>
+          <li><span class="green-bold">Improve airflow:</span> Consider adding more fans to your system or optimizing the placement of existing ones to improve air circulation.</li>
+          <li><span class="green-bold">Reapply thermal paste:</span> Over time, thermal paste can dry out and lose its effectiveness. Reapplying fresh thermal paste can help improve heat dissipation.</li>
+          <li><span class="green-bold">Monitor temperature regularly:</span> Use a system monitoring tool to keep an eye on the temperature and set thresholds for alerts.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="question">
+        <span>4. What should I do if my disk is full?</span>
+        <svg width="15" height="10" viewBox="0 0 42 25">
+            <path d="M3 3L21 21L39 3" stroke="white" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </div>
+  
+      <div class="answer">
+        <p>A full disk can severely impact system performance. Here are steps to free up space:</p>
+        <ul>
+            <li><span class="green-bold">Delete unnecessary files:</span> Use disk cleanup tools to remove old files, temporary files, and cached data.</li>
+            <li><span class="green-bold">Move files to external storage:</span> If you have large files that are not needed immediately, consider transferring them to an external hard drive or cloud storage.</li>
+            <li><span class="green-bold">Uninstall unused applications:</span> Remove programs that are not being used to free up disk space.</li>
+            <li><span class="green-bold">Run a disk defragmentation:</span> (for HDDs) Defragmenting can improve performance by reorganizing fragmented data.</li>
+            <li><span class="green-bold">Check for large files or hidden data:</span> Use disk space analysis tools to identify large files or folders consuming excessive space.</li>
+            <li><span class="green-bold">Consider upgrading storage:</span> If your disk is frequently full, consider upgrading to a larger SSD or HDD for more capacity.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq">
+      <div class="question">
+        <span>5. How can I monitor the health of my system resources regularly?</span>
+        <svg width="15" height="10" viewBox="0 0 42 25">
+            <path d="M3 3L21 21L39 3" stroke="white" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </div>
+      
+      <div class="answer">
+        <p>Regularly monitoring your system's resources helps prevent performance issues:</p>
+        <ul>
+            <li><span class="green-bold">Use system monitoring tools:</span> Tools like Task Manager (Windows), Activity Monitor (macOS), or third-party apps like HWMonitor or Speccy allow you to keep an eye on CPU, RAM, disk, and temperature.</li>
+            <li><span class="green-bold">Set up alerts:</span> Configure your system to alert you when resource usage exceeds a certain threshold.</li>
+            <li><span class="green-bold">Review health check reports:</span> Your health check system should provide regular reports on the status of your resources. Set it to notify you of any anomalies.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+
+<script>
+  const faqs = document.querySelectorAll(".faq");
+
+  selector = document.querySelectorAll(".pageSelector")
+			selector[3].setAttribute("id", "selected")
+
+  faqs.forEach((faq) => {
+      faq.addEventListener("click", () => {
+          faq.classList.toggle("active");
+      });
+});
+
+</script>
+{% endblock %}

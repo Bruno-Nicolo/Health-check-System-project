@@ -8,7 +8,8 @@ app = Flask(__name__)
 # Routing
 @app.route("/", methods=["POST", "GET"])
 def dashboard():
-    return render_template("dashboard.html", cpu=CPU, ram=RAM, disk=DISK, network=NETWORK, general=GENERAL_INFO)
+    disk_object = DISK.to_dict()
+    return render_template("dashboard.html", cpu=CPU, ram=RAM, disk=disk_object, network=NETWORK, general=GENERAL_INFO)
 
 @app.route("/settings", methods=["POST", "GET"])
 def settings():
@@ -17,6 +18,10 @@ def settings():
 @app.route("/users", methods=["POST", "GET"])
 def users():
     return render_template("users.html")
+
+@app.route("/faq", methods=["POST", "GET"])
+def faq():
+    return render_template("faq.html")
 
 @app.route("/login", methods=["POST", "GET"])
 def login():

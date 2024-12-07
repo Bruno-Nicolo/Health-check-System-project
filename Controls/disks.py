@@ -3,28 +3,43 @@ import psutil
 
 
 class Disk:
-    def __init__(self, disk_threshold):
-        self.disk_threshold = disk_threshold
+    def __init__(self, threshold=10, used=None, total=None, percent=None):
+        self.threshold = threshold
+        self.used = used if used is not None else self.set_used()
+        self.total = total if total is not None else self.set_total()
+        self.percent = percent if percent is not None else self.set_percent()
+
+    def to_dict(self):
+        return {
+            "used": self.used,
+            "total": self.total,
+            "percent": self.percent,
+            "get_priority": self.get_priority()
+        }
+
+    def set_threshold(self, value):
+        self.threshold = value
 
 
-    def used(self):
+    def set_used(self):
         disks = psutil.disk_usage('/').used
-        return round(disks * 10**(-9), 2) #da byte a gigabyte
+        self.used = round(disks * 10**(-9), 2) #da byte a gigabyte
+        return self.used 
 
 
-    def total(self):
+    def set_total(self):
         disks = psutil.disk_usage('/')
-        return round(disks.total * 10**(-9), 2) #da byte a gigabyte
+        self.total = round(disks.total * 10**(-9), 2) #da byte a gigabyte
+        return self.total
 
-
-    def percent(self):
-        disks = psutil.disk_usage('/')
-        return disks.percent
+    def set_percent(self):
+        self.percent = psutil.disk_usage('/').percent
+        return self.percent
 
 
     def get_priority(self):
         free = psutil.disk_usage('/').free * 2 ** (-30)
-        if free <= self.disk_threshold:
+        if free <= self.threshold:
             return "🟠"
         else:
             return ""
