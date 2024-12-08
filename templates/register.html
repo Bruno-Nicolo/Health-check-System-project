@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <title>Document</title>
+</head>
+<body id="body-1">
+  <div class="card">
+    <div style="font: var(--h1)">Register</div>
+    <hr>
+
+    <form action="{{ url_for('register') }}" method="POST">
+
+
+      <div>
+        <div style="font: var(--h2)">Username:</div>
+        <input type="text" name="username" placeholder="Username" required="required">
+      </div>
+
+      <br>
+
+
+      <div>
+        <div style="font: var(--h2)">Password:</div>
+        <input type="password" name="password" id="" placeholder="Password" required="required">
+      </div>
+      <br>
+
+      <div id="btn">
+        <button type="submit" style="font: var(--h2); padding: 2px 25px;">Sign up</button>
+      </div>
+
+    </form>
+
+      <br><br>
+
+    <div class="description">Already have an account? <a class="description" href="{{ url_for('login') }}" style="text-decoration: underline">Sign in</a></div>
+  </div>
+</body>
+</html>
