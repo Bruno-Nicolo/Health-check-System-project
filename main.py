@@ -1,42 +1,40 @@
-import threading
-from flask import Flask, render_template
-from telegram_bot import CPU, RAM, DISK, NETWORK, GENERAL_INFO
-import app as main
-
-app = Flask(__name__)
-
-# Routing
-@app.route("/", methods=["POST", "GET"])
-def dashboard():
-    disk_object = DISK.to_dict()
-    return render_template("dashboard.html", cpu=CPU, ram=RAM, disk=disk_object, network=NETWORK, general=GENERAL_INFO)
-
-@app.route("/settings", methods=["POST", "GET"])
-def settings():
-    return render_template("settings.html")
-
-@app.route("/users", methods=["POST", "GET"])
-def users():
-    return render_template("users.html")
-
-@app.route("/faq", methods=["POST", "GET"])
-def faq():
-    return render_template("faq.html")
-
-@app.route("/login", methods=["POST", "GET"])
-def login():
-    return render_template("login.html")
+from flask_login import current_user
+from telegram.ext import Application, CommandHandler, MessageHandler, filters
+from telegram_bot import Bot
 
 
-def run_flask():
-    app.run(debug=True, use_reloader=False)
+# Bot variables
+BOT = Bot()
 
 
-if __name__ == "__main__":
-    #app.run(debug=True)
-    flask_thread = threading.Thread(target=run_flask)
-    flask_thread.daemon = True  # Il thread Flask termina con il programma
-    flask_thread.start()
+def add_handlers(bot):
+    # commands
+    bot.add_handler(CommandHandler('start', BOT.start_command))
+    bot.add_handler(CommandHandler('help', BOT.help_command))
+    bot.add_handler(CommandHandler('status', BOT.status_command))
+    bot.add_handler(CommandHandler('id', BOT.id_command))
+    # Messages
+    bot.add_handler(MessageHandler(filters.TEXT, BOT.handle_message))
+    # Errors
+    bot.add_error_handler(BOT.error)
 
-    main.main()
+
+def main():
+    print("Starting bot...\n")
+    interval_time = BOT.interval * 60
+
+    app = Application.builder().token(BOT.TOKEN).build()
+
+    add_handlers(app)
+
+
+    # messaggio ricorrente ogni 5min
+    app.job_queue.run_repeating(BOT.send_status, interval=interval_time, first=120)
+
+    # controllo emergenze ogni 2min
+    app.job_queue.run_repeating(BOT.check_emergency, interval=120, first=60)
+
+    print("Polling...")
+    app.run_polling()
+
 

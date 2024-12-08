@@ -10,28 +10,37 @@
   <div class="card">
     <div style="font: var(--h1)">Login</div>
     <hr>
-    
-    <div>
+
+    {% if result == "failed" %}
+      <div style="font: var(--p); color: var(--red)">Error: try again!</div>
+    {% endif %}
+
+
+    <form action="{{ url_for('login') }}" method="POST">
+      <div>
       <div style="font: var(--h2)">Username:</div>
-      <input type="text" name="username" id="" placeholder="Username">
+      <input type="text" name="username" placeholder="Username" required="required">
     </div>
+
     <br>
 
     <div>
-      <div style="font: var(--h2)">Email:</div>
-      <input type="text" name="email" id="" placeholder="Email">
-    </div>
-    <br>
-    
-    <div>
       <div style="font: var(--h2)">Password:</div>
-      <input type="password" name="password" id="" placeholder="Password">
+      <input type="password" name="password" placeholder="Password" required="required">
     </div>
+
     <br>
-    
+
     <div id="btn">
-      <button style="font: var(--h2); padding: 2px 25px;">Login</button>
+      <button type="submit" style="font: var(--h2); padding: 2px 25px;">Login</button>
     </div>
+    </form>
+
+    <br>
+    <br>
+
+    <div class="description">Don't have an account? <a class="description" href="{{ url_for('register') }}" style="text-decoration: underline">Sign up</a></div>
+
   </div>
 </body>
 </html>

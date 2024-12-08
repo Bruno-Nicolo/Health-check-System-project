@@ -1,38 +1,38 @@
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_login import LoginManager
+from flask_bcrypt import Bcrypt
 
-from telegram.ext import Application, CommandHandler, MessageHandler, filters
-from telegram_bot import Bot
+db = SQLAlchemy()
 
+def create_app():
+    app = Flask(__name__)
+    #app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./database.db"
+    import os
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(BASE_DIR, 'database.db')}"
+    app.secret_key = "SECRET KEY"
 
-# Bot variables
-chat_id = "725588367"
-BOT = Bot(chat_id)
+    db.init_app(app)
 
+    login_manager = LoginManager()
+    login_manager.init_app(app)
 
-def add_handlers(bot):
-    # commands
-    bot.add_handler(CommandHandler('start', BOT.start_command))
-    bot.add_handler(CommandHandler('help', BOT.help_command))
-    bot.add_handler(CommandHandler('status', BOT.status_command))
-    bot.add_handler(CommandHandler('id', BOT.id_command))
-    # Messages
-    bot.add_handler(MessageHandler(filters.TEXT, BOT.handle_message))
-    # Errors
-    bot.add_error_handler(BOT.error)
+    from user import User
 
+    @login_manager.user_loader
+    def log_user(uid):
+        return User.query.get(uid)
 
-def main():
-    print("Starting bot...\n")
-    app = Application.builder().token(BOT.TOKEN).build()
+    bcrypt = Bcrypt(app)
 
-    add_handlers(app)
+    from routes import register_routes
+    register_routes(app, db, bcrypt)
 
-    # messaggio ricorrente ogni 5min
-    app.job_queue.run_repeating(BOT.send_status, interval=300, first=120)
+    migrate = Migrate(app,db)
 
-    # controllo emergenze ogni 2min
-    app.job_queue.run_repeating(BOT.check_emergency, interval=120, first=60)
+    return app
 
-    print("Polling...")
-    app.run_polling()
 
 

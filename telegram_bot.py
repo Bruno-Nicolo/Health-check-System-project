@@ -1,4 +1,4 @@
-
+from flask_login import current_user
 from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext
 from Controls.cpu import Cpu
@@ -16,10 +16,19 @@ GENERAL_INFO = General_info()
 
 
 class Bot:
-    def __init__(self, chat_id):
+    def __init__(self, chat_id="", interval=5):
         self.__USERNAME = "@SysScanner_bot"
         self.TOKEN = "7717659591:AAHLYDAqpO1MZoDmQKnf_KD7H2KSpuAh4ZI"
         self.chat_id = chat_id
+        self.interval = interval
+
+
+    def set_interval(self, value):
+        self.interval = value
+
+    def update_id_list(self, id_list):
+        self.chat_id = id_list
+
 
     def __get_server_status(self):
         return (
@@ -41,7 +50,8 @@ class Bot:
 
 
     async def send_status(self, context: CallbackContext) -> None:
-        await context.bot.send_message(chat_id=self.chat_id, text=self.__get_server_status(), parse_mode="HTML")
+        for uid in self.chat_id:
+            await context.bot.send_message(chat_id=uid, text=self.__get_server_status(), parse_mode="HTML")
 
 
     async def check_emergency(self, context: CallbackContext) -> None:
@@ -50,7 +60,8 @@ class Bot:
             DISK.get_priority() != "" or
             GENERAL_INFO.get_priority() != ""
         ):
-            await context.bot.send_message(chat_id=self.chat_id, text=self.__get_server_status(), parse_mode="HTML")
+            for uid in self.chat_id:
+                await context.bot.send_message(chat_id=uid, text=self.__get_server_status(), parse_mode="HTML")
 
 
     # Commands
@@ -77,13 +88,18 @@ class Bot:
 
 
     async def status_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        await update.message.reply_text(self.__get_server_status(), parse_mode="HTML")
+        chat_id = update.message.chat.id
+        print(self.chat_id)
+        if f"{chat_id}" in self.chat_id:
+            await update.message.reply_text(self.__get_server_status(), parse_mode="HTML")
+        else:
+            await update.message.reply_text("Not Available")
 
 
     async def id_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        id = update.message.chat.id
+        user_id = update.message.chat.id
         chat_type = update.message.chat.type
-        await update.message.reply_text(f"Your {chat_type} chatID is:\n {id}")
+        await update.message.reply_text(f"Your {chat_type} chatID is:\n {user_id}")
 
 
     # Responses

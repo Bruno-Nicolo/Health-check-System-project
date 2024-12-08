@@ -17,37 +17,41 @@
 			<div style="font: var(--h1);">Thresholds</div>
 			<div class="description">Set custom thresholds for CPU, RAM, Disk space and global temperature</div>
 			<hr>
-			<div style="display: flex; align-items: center;">
-					<span style="font: var(--p); flex-grow: 1;" >CPU usage percentage:</span>
-					<input type="text" style="width: 100px;">
+
+			<form action="{{ url_for('settings') }}" method="POST">
+				<div style="display: flex; align-items: center;">
+						<span style="font: var(--p); flex-grow: 1;" >CPU usage percentage:</span>
+						<input type="text" name="cpu" style="width: 100px;" placeholder="{{ cpu }}">
+					</div>
+					<br>
+					<div style="display: flex; align-items: center">
+						<span style="font: var(--p); flex-grow: 1;">Available RAM percentage:</span>
+						<input type="text" name="ram" style="width: 100px;" placeholder="{{ ram }}">
+					</div>
+					<br>
+					<div style="display: flex; align-items: center">
+						<span style="font: var(--p); flex-grow: 1;">Disks free space in Gb:</span>
+						<input type="text" name="disk" style="width: 100px;" placeholder="{{ disk }}">
+					</div>
+					<br>
+					<div style="display: flex; align-items: center">
+						<span style="font: var(--p); flex-grow: 1;">Global temperature in Celsius:</span>
+						<input type="text" name="temperature" style="width: 100px;" placeholder="{{ temperature }}">
+					</div>
+					<br>
+					<div style="font: var(--h1);">Messages</div>
+					<div style="font: var(--small); color: var(--gray);">Set how often you will receive a message from our bot with the server status</div>
+					<hr>
+					<div style="display: flex; align-items: center">
+						<span style="font: var(--p); flex-grow: 1;">Recurring interval in min:</span>
+						<input type="text" name="interval" style="width: 100px;" placeholder="{{ interval }}">
 				</div>
 				<br>
-				<div style="display: flex; align-items: center">
-					<span style="font: var(--p); flex-grow: 1;">Available RAM percentage:</span>
-					<input type="text" style="width: 100px;">
+				<div id="btn">
+					<button type="submit" style="margin-right: -30px; padding: 5px 15px;">Save</button>
 				</div>
-				<br>
-				<div style="display: flex; align-items: center">
-					<span style="font: var(--p); flex-grow: 1;">Disks free space in Gb:</span>
-					<input type="text" style="width: 100px;">
-				</div>
-				<br>
-				<div style="display: flex; align-items: center">
-					<span style="font: var(--p); flex-grow: 1;">Global temperature in Celsius:</span>
-					<input type="text" style="width: 100px;">
-				</div>
-				<br>
-				<div style="font: var(--h1);">Messages</div>
-				<div style="font: var(--small); color: var(--gray);">Set how often you will receive amessage from our bot with the server status</div>
-				<hr>
-				<div style="display: flex; align-items: center">
-					<span style="font: var(--p); flex-grow: 1;">Recurring interval in min:</span>
-					<input type="text" style="width: 100px;">
-			</div>
-			<br>
-			<div id="btn">
-				<button style="margin-right: -30px; padding: 5px 15px;">Save</button>
-			</div>
+			</form>
+
 		</div>
 
 		<script>

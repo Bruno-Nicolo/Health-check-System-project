@@ -3,8 +3,8 @@ import time
 
 
 class General_info:
-    def __init__(self, treshold=45):
-        self.threshold = treshold
+    def __init__(self, threshold=45):
+        self.threshold = threshold
 
 
     def set_threshold(self, value):
