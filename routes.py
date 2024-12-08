@@ -10,7 +10,6 @@ def register_routes(app, db, bcrypt):
     @app.route("/", methods=["POST", "GET"])
     def dashboard():
         if current_user.is_authenticated:
-            BOT.update_id_list(current_user.chat_id)
             disk_object = DISK.to_dict()
             return render_template("dashboard.html", cpu=CPU, ram=RAM, disk=disk_object, network=NETWORK,
                                    general=GENERAL_INFO)
@@ -22,9 +21,10 @@ def register_routes(app, db, bcrypt):
     def settings():
         user = db.session.query(User).get(current_user.id)
         if request.method == "GET":
-            return render_template("settings.html", cpu=CPU.threshold, ram=RAM.threshold, disk=DISK.threshold,
-                                   temperature=GENERAL_INFO.threshold, interval=BOT.interval)
+            return render_template("settings.html", cpu=user.settings["cpu"], ram=user.settings["ram"], disk=user.settings["disk"],
+                                   temperature=user.settings["temperature"], interval=BOT.interval)
         if request.method == "POST":
+
             if request.form.get("cpu") != "":
                 value = int(request.form.get("cpu"))
                 CPU.set_threshold(value)
@@ -46,11 +46,13 @@ def register_routes(app, db, bcrypt):
                 BOT.set_interval(value)
 
             try:
+                updated_settings = user.settings.copy()
+                updated_settings["cpu"] = CPU.threshold
+                updated_settings["ram"] = RAM.threshold
+                updated_settings["disk"] = DISK.threshold
+                updated_settings["temperature"] = GENERAL_INFO.threshold
 
-                user.settings["cpu"] = CPU.threshold,
-                user.settings["ram"] = RAM.threshold,
-                user.settings["disk"] = DISK.threshold,
-                user.settings["temperature"] = GENERAL_INFO.threshold,
+                user.settings = updated_settings
 
                 user.interval = BOT.interval
 
@@ -120,6 +122,7 @@ def register_routes(app, db, bcrypt):
 
             db.session.add(new_user)
             db.session.commit()
+            login_user(new_user)
             return redirect(url_for("dashboard"))
 
 
@@ -134,13 +137,25 @@ def register_routes(app, db, bcrypt):
             try:
                 user = User.query.filter(User.username == username).first()
 
+                print(bcrypt.check_password_hash(user.password, password))
+
                 if bcrypt.check_password_hash(user.password, password):
                     login_user(user)
+
+                    #BOT.update_id_list(user.chat_id)
+
+                    #print(type(user.settings["cpu"]))
+                    #print(type(CPU.threshold))
+                    #CPU.set_threshold(user.settings["cpu"])
+                    #RAM.set_threshold(float(user.settings["ram"]))
+                    #DISK.set_threshold(float(user.settings["disk"]))
+                    #GENERAL_INFO.set_threshold(float(user.settings["temperature"]))
                     return redirect(url_for("dashboard"))
                 else:
                     return render_template("login.html", result="failed")
-            except:
-                return render_template("login.html", result="failed")
+            except Exception as e:
+                #return render_template("login.html", result="failed")
+                return f"{e}"
 
 
     @app.route("/logout", methods=["POST", "GET"])

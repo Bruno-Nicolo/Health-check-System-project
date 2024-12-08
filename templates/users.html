@@ -31,13 +31,14 @@
 			<ul>
 				{% if chat_list != [] %}
 					{% for id in chat_list %}
-					<!--<li>{{id}}<i data-lucide="trash-2"></i></li>-->
-					<li style="display:flex; align-items:center">
+					<li>
+						<span style="display:flex; align-items: center;">
 						<span>{{id}}</span>
 						<form method="POST" action="{{ url_for('users') }}">
 							<input type="hidden" name="delete_item" value="{{ id }}">
-							<button name="delete_item" type="submit"><i data-lucide="trash-2"></i></button>
+							<button name="delete_item" type="submit" style="color: var(--gray); background-color: var(--white); cursor:pointer"><i data-lucide="trash-2"></i></button>
 						</form>
+						</span>
 					</li>
 					{% endfor %}
 				{% endif %}
