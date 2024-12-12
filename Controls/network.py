@@ -43,3 +43,4 @@ class Network:
             return down_speed # in Kb/s
         except:
             return "Not Available"
+

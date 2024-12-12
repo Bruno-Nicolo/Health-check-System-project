@@ -1,4 +1,4 @@
-from flask_login import current_user
+
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 from telegram_bot import Bot
 
@@ -26,7 +26,6 @@ def main():
     app = Application.builder().token(BOT.TOKEN).build()
 
     add_handlers(app)
-
 
     # messaggio ricorrente ogni 5min
     app.job_queue.run_repeating(BOT.send_status, interval=interval_time, first=120)

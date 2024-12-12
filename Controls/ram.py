@@ -45,7 +45,6 @@ class Ram:
 
     def get_priority(self):
         if self.set_percentage() <= self.threshold:
-            #return "⚠️"
             return "🔴"
         else:
             return ""

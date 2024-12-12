@@ -1,4 +1,3 @@
-from flask_login import current_user
 from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext
 from Controls.cpu import Cpu
@@ -89,7 +88,6 @@ class Bot:
 
     async def status_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.message.chat.id
-        print(self.chat_id)
         if f"{chat_id}" in self.chat_id:
             await update.message.reply_text(self.__get_server_status(), parse_mode="HTML")
         else:

@@ -17,3 +17,4 @@ class User(db.Model, UserMixin):
 
     def get_id(self):
         return self.id
+
