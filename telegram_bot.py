@@ -6,6 +6,12 @@ from Controls.disks import Disk
 from Controls.network import Network
 from Controls.general_info import General_info
 
+from dotenv import load_dotenv
+from os import getenv
+
+load_dotenv()
+
+
 # Objects
 CPU = Cpu()
 RAM = Ram()
@@ -17,7 +23,7 @@ GENERAL_INFO = General_info()
 class Bot:
     def __init__(self, chat_id="", interval=5):
         self.__USERNAME = "@SysScanner_bot"
-        self.TOKEN = "7717659591:AAHLYDAqpO1MZoDmQKnf_KD7H2KSpuAh4ZI"
+        self.TOKEN = getenv("BOT_TOKEN")
         self.chat_id = chat_id
         self.interval = interval
 
